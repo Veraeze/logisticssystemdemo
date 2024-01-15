@@ -1,4 +1,4 @@
-package com.Raveralogistics.Demo.main;
+package com.Raveralogistics.Demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

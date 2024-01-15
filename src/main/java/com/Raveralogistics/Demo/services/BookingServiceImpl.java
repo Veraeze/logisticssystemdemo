@@ -8,6 +8,7 @@ import com.Raveralogistics.Demo.data.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class BookingServiceImpl implements BookingService{
     UserRepository userRepository;
 
     @Override
-    public Booking book(String bookingId, Sender senderInfo, Customer receiverInfo, String userId, String parcelName, LocalDateTime dateTime) {
+    public Booking book(String bookingId, Sender senderInfo, Customer receiverInfo, String userId, String parcelName, BigDecimal cost, LocalDateTime dateTime) {
         Booking booking = new Booking();
 
         booking.setBookingId(bookingId);
@@ -31,6 +32,7 @@ public class BookingServiceImpl implements BookingService{
         booking.setParcelName(parcelName);
         booking.setDateTime(dateTime);
         booking.setBooked(true);
+        booking.setCost(cost);
 
         bookingRepository.save(booking);
         return booking;

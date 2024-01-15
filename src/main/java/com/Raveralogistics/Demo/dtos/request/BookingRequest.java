@@ -13,5 +13,5 @@ public class BookingRequest {
     private Customer receiverInfo;
     private  String userId;
     private String parcelName;
-    private BigDecimal cost = BigDecimal.ZERO;
+    private double weight;
 }

@@ -1,13 +1,13 @@
 package com.Raveralogistics.Demo.services;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
 import com.Raveralogistics.Demo.data.model.*;
 import com.Raveralogistics.Demo.data.repository.BookingRepository;
 import com.Raveralogistics.Demo.data.repository.FeedbackRepository;
 import com.Raveralogistics.Demo.data.repository.UserRepository;
 import com.Raveralogistics.Demo.dtos.request.*;
 import com.Raveralogistics.Demo.exceptions.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -16,15 +16,15 @@ import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class LogisticServiceTest {
-    @Autowired
-    LogisticService ravera;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    BookingRepository bookingRepository;
-    @Autowired
-    FeedbackRepository feedbackRepository;
+public class LogisticServiceTest {
+@Autowired
+   private LogisticService ravera;
+@Autowired
+    private UserRepository userRepository;
+@Autowired
+    private BookingRepository bookingRepository;
+@Autowired
+    private FeedbackRepository feedbackRepository;
 
     @AfterEach
     public void delete(){
@@ -34,7 +34,7 @@ class LogisticServiceTest {
     }
 
     @Test
-    void testThatAUserCanRegister(){
+    public void testThatAUserCanRegister(){
 
         RegisterRequest registerRequest = request("vera", "08093280641", "veraeze@gmail.com", "password", address("alaka", "lekki", "lagos", "Nigeria", "12001"));
         ravera.register(registerRequest);
@@ -303,7 +303,7 @@ class LogisticServiceTest {
         bookingRequest.setReceiverInfo(receiver);
         bookingRequest.setUserId(user.getUserId());
         bookingRequest.setParcelName("Hair");
-        bookingRequest.setCost(BigDecimal.valueOf(500));
+        bookingRequest.setWeight(0.25);
 
         ravera.bookService(bookingRequest);
         assertEquals(1, bookingRepository.count());
@@ -313,16 +313,16 @@ class LogisticServiceTest {
     @Test
     void testThatRegisteredUserCanLogInAndBookAServiceMoreThanOnce() {
 
-        RegisterRequest registerRequest = request("vera", "08093280641", "veraeze@gmail.com", "password", address("alaka", "lekki", "lagos", "Nigeria", "12001"));
+        RegisterRequest registerRequest = request("veras", "08093280641", "veraeze@gmail.com", "password", address("alaka", "lekki", "lagos", "Nigeria", "12001"));
         ravera.register(registerRequest);
-        assertFalse(ravera.findAccountBelongingTo("vera").isLoggedIn());
+        assertFalse(ravera.findAccountBelongingTo("veras").isLoggedIn());
 
         LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setName("vera");
+        loginRequest.setName("veras");
         loginRequest.setPassword("password");
 
         ravera.login(loginRequest);
-        assertTrue(ravera.findAccountBelongingTo("vera").isLoggedIn());
+        assertTrue(ravera.findAccountBelongingTo("veras").isLoggedIn());
 
         Sender sender = new Sender();
         sender.setName("vera");
@@ -336,7 +336,7 @@ class LogisticServiceTest {
         receiver.setEmail("susan@yahoo.com");
         receiver.setHomeAddress(address("pentville", "maitama", "abuja", "nigeria", "11002"));
 
-        User user = ravera.findAccountBelongingTo("vera");
+        User user = ravera.findAccountBelongingTo("veras");
 
         DepositMoneyRequest depositMoneyRequest = new DepositMoneyRequest();
         depositMoneyRequest.setUserId(user.getUserId());
@@ -348,7 +348,7 @@ class LogisticServiceTest {
         bookingRequest.setReceiverInfo(receiver);
         bookingRequest.setUserId(user.getUserId());
         bookingRequest.setParcelName("Hair");
-        bookingRequest.setCost(BigDecimal.valueOf(500));
+       bookingRequest.setWeight(0.25);
 
         ravera.bookService(bookingRequest);
         ravera.bookService(bookingRequest);
@@ -389,7 +389,7 @@ class LogisticServiceTest {
         bookingRequest.setReceiverInfo(receiver);
         bookingRequest.setUserId(user.getUserId());
         bookingRequest.setParcelName("Hair");
-        bookingRequest.setCost(BigDecimal.valueOf(500));
+        bookingRequest.setWeight(4.0);
 
         assertThrows(LoginError.class, ()-> ravera.bookService(bookingRequest));
 
@@ -433,7 +433,7 @@ class LogisticServiceTest {
         bookingRequest.setReceiverInfo(receiver);
         bookingRequest.setUserId(user.getUserId());
         bookingRequest.setParcelName("Hair");
-        bookingRequest.setCost(BigDecimal.valueOf(500));
+        bookingRequest.setWeight(0.25);
 
         ravera.bookService(bookingRequest);
         assertEquals(1, bookingRepository.count());
@@ -486,7 +486,7 @@ class LogisticServiceTest {
         bookingRequest.setReceiverInfo(receiver);
         bookingRequest.setUserId(user.getUserId());
         bookingRequest.setParcelName("Hair");
-        bookingRequest.setCost(BigDecimal.valueOf(500));
+        bookingRequest.setWeight(0.25);
 
         ravera.bookService(bookingRequest);
         assertEquals(1, bookingRepository.count());
@@ -538,7 +538,7 @@ class LogisticServiceTest {
         bookingRequest.setReceiverInfo(receiver);
         bookingRequest.setUserId(user.getUserId());
         bookingRequest.setParcelName("Hair");
-        bookingRequest.setCost(BigDecimal.valueOf(500));
+        bookingRequest.setWeight(0.25);
 
         ravera.bookService(bookingRequest);
         assertEquals(1, bookingRepository.count());
@@ -590,12 +590,12 @@ class LogisticServiceTest {
         bookingRequest.setReceiverInfo(receiver);
         bookingRequest.setUserId(user.getUserId());
         bookingRequest.setParcelName("Hair");
-        bookingRequest.setCost(BigDecimal.valueOf(500));
+        bookingRequest.setWeight(0.25);
 
         ravera.bookService(bookingRequest);
         assertEquals(1, bookingRepository.count());
 
-        assertEquals(BigDecimal.valueOf(2500), ravera.checkWalletBalance(user.getUserId()));
+        assertEquals(BigDecimal.valueOf(2500.0), ravera.checkWalletBalance(user.getUserId()));
     }
 
     @Test
@@ -636,7 +636,7 @@ class LogisticServiceTest {
         bookingRequest.setReceiverInfo(receiver);
         bookingRequest.setUserId(user.getUserId());
         bookingRequest.setParcelName("Hair");
-        bookingRequest.setCost(BigDecimal.valueOf(500));
+        bookingRequest.setWeight(0.25);
 
         ravera.bookService(bookingRequest);
         assertEquals(1, bookingRepository.count());

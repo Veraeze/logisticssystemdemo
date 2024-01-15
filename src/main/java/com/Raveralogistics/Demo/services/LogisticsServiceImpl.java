@@ -34,10 +34,11 @@ public class LogisticsServiceImpl implements LogisticService{
 
     @Override
     public User register(RegisterRequest registerRequest) {
-        if (validateUsername(registerRequest.getName())) throw new UserNameNotAvailable(registerRequest.getName() + " already exists!");
-
         User user = map(registerRequest.getName(), registerRequest.getPassword(),registerRequest.getPhoneNumber(),
                 registerRequest.getEmail(), registerRequest.getHomeAddress(), "URV" + (userRepository.count()+1));
+        if (validateUsername(registerRequest.getName())) {
+            throw new UserNameNotAvailable(registerRequest.getName() + " already exists!");
+        }
 
         Wallet wallet = new Wallet();
         user.setWallet(wallet);
@@ -119,11 +120,11 @@ public class LogisticsServiceImpl implements LogisticService{
         validateUser(user, bookingRequest.getUserId());
         validateLogin(user);
 
-        withdrawMoneyFromWallet(bookingRequest.getUserId(), bookingRequest.getCost());
+        withdrawMoneyFromWallet(bookingRequest.getUserId(), BigDecimal.valueOf(bookingRequest.getWeight() * 2000));
 
         return bookingService.book("RVA" + (bookingRepository.count() + 1), bookingRequest.getSenderInfo(),
                 bookingRequest.getReceiverInfo(), bookingRequest.getUserId(),
-                bookingRequest.getParcelName(), LocalDateTime.now()
+                bookingRequest.getParcelName(), BigDecimal.valueOf((bookingRequest.getWeight()*2000)), LocalDateTime.now()
         );
     }
 

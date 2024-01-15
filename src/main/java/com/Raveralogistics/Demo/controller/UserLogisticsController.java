@@ -17,7 +17,7 @@ public class UserLogisticsController {
     @Autowired
     private LogisticService ravera;
 
-    @PostMapping("/Sign-up")
+    @PostMapping("Sender/Sign-up")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest){
 
         RegisterResponse registerResponse = new RegisterResponse();
@@ -32,7 +32,7 @@ public class UserLogisticsController {
         }
     }
 
-    @PostMapping("/login")
+    @PostMapping("Sender/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
         LoginResponse loginResponse = new LoginResponse();
 
@@ -47,7 +47,7 @@ public class UserLogisticsController {
         }
     }
 
-    @PostMapping("/logout")
+    @PostMapping("Sender/logout")
     public ResponseEntity<?> logout(@RequestBody LoginRequest logoutRequest){
         LoginResponse loginResponse = new LoginResponse();
 
@@ -62,7 +62,7 @@ public class UserLogisticsController {
         }
     }
 
-    @PostMapping("/deposit into wallet")
+    @PostMapping("Sender/deposit-into-wallet")
     public ResponseEntity<?> depositMoneyIntoWallet(@RequestBody DepositMoneyRequest depositMoneyRequest){
         WalletResponse walletResponse = new WalletResponse();
 
@@ -77,13 +77,13 @@ public class UserLogisticsController {
         }
     }
 
-    @PostMapping("/book service")
+    @PostMapping("Sender/book-service")
     public ResponseEntity<?> bookService(@RequestBody BookingRequest bookingRequest){
         BookingResponse bookServiceResponse = new BookingResponse();
 
         try {
             Booking booking = ravera.bookService(bookingRequest);
-            bookServiceResponse.setMessage("Service booked successfully, your booking id is " + booking.getBookingId());
+            bookServiceResponse.setMessage("Service booked successfully, your booking id is " + booking.getBookingId()+" and the cost is $" + booking.getCost());
             return new ResponseEntity<>(new ApiResponse(true,bookServiceResponse),HttpStatus.ACCEPTED);
         }
         catch (Exception exception){
@@ -92,7 +92,7 @@ public class UserLogisticsController {
         }
     }
 
-    @PostMapping("/feedback")
+    @PostMapping("User/feedback")
     public ResponseEntity<?> addReview(@RequestBody FeedbackRequest feedbackRequest){
         FeedbackResponse reviewResponse = new FeedbackResponse();
 
