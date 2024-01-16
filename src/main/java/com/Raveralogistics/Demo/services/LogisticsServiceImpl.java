@@ -149,6 +149,11 @@ public class LogisticsServiceImpl implements LogisticService{
     }
 
     @Override
+    public Object findListOfFeedback() {
+        return new ArrayList<>(feedbackRepository.findAll());
+    }
+
+    @Override
     public BigDecimal checkWalletBalance(String userId) {
         User user = userRepository.findUserBy(userId);
 

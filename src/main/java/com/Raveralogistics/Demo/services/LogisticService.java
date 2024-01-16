@@ -23,6 +23,8 @@ public interface LogisticService {
 
     Feedback addFeedback(FeedbackRequest feedbackRequest);
 
+    Object findListOfFeedback();
+
     BigDecimal checkWalletBalance(String userId);
 
     Object findListOfBookingOf(String username);
