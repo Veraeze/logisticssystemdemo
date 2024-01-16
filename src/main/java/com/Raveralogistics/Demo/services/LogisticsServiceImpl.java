@@ -1,11 +1,9 @@
 package com.Raveralogistics.Demo.services;
 
-import com.Raveralogistics.Demo.data.model.Booking;
-import com.Raveralogistics.Demo.data.model.Feedback;
-import com.Raveralogistics.Demo.data.model.User;
-import com.Raveralogistics.Demo.data.model.Wallet;
+import com.Raveralogistics.Demo.data.model.*;
 import com.Raveralogistics.Demo.data.repository.BookingRepository;
 import com.Raveralogistics.Demo.data.repository.FeedbackRepository;
+import com.Raveralogistics.Demo.data.repository.ShippingRepository;
 import com.Raveralogistics.Demo.data.repository.UserRepository;
 import com.Raveralogistics.Demo.dtos.request.*;
 import com.Raveralogistics.Demo.exceptions.*;
@@ -16,6 +14,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.Raveralogistics.Demo.utils.Mapper.*;
 
@@ -31,6 +30,10 @@ public class LogisticsServiceImpl implements LogisticService{
     FeedbackServiceImpl feedbackService;
     @Autowired
     FeedbackRepository feedbackRepository;
+    @Autowired
+    ShippingServiceImpl shippingService;
+    @Autowired
+    ShippingRepository shippingRepository;
 
     @Override
     public User register(RegisterRequest registerRequest) {
@@ -168,6 +171,38 @@ public class LogisticsServiceImpl implements LogisticService{
             if (booking.getUserId().equals(user.getUserId())) bookingList.add(booking);
         }
         return bookingList;
+    }
+
+    @Override
+    public void updateTrackingInfo(PackageRequest packageRequest) {
+        Shipping ship = shippingRepository.findShippingByShippingId(packageRequest.getShippingId());
+        if (ship == null) throw new ShippingIdNotFound("Error! shipping ID not found \nplease try again") ;
+        ship.setShipped(true);
+        PackageHistory history = new PackageHistory();
+        history.setAction(packageRequest.getAction());
+        history.setDateTime(LocalDateTime.now());
+        ship.getHistory().add(history);
+        ship.setShippingId(packageRequest.getShippingId());
+        shippingRepository.save(ship);
+    }
+
+    @Override
+    public List<PackageHistory> trackParcel(String Id) {
+        Shipping ship = shippingRepository.findShippingByShippingId(Id);
+        if (ship == null) throw new ShippingIdNotFound("Error! shipping ID not found \nplease try again") ;
+        return ship.getHistory();
+    }
+
+    @Override
+    public Shipping shipParcel(ShippingRequest shippingRequest) {
+        User user = userRepository.findUserBy(shippingRequest.getUserId());
+
+        validateUser(user, shippingRequest.getUserId());
+        validateLogin(user);
+        Shipping service = shippingService.ship("SHP" + (shippingRepository.count() + 1), shippingRequest.getBookingId(),
+                shippingRequest.getUserId(), LocalDateTime.now());
+        shippingRepository.save(service);
+        return service;
     }
 
     public boolean validateUsername(String userName){

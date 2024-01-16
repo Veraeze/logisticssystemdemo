@@ -1,11 +1,10 @@
 package com.Raveralogistics.Demo.services;
 
-import com.Raveralogistics.Demo.data.model.Booking;
-import com.Raveralogistics.Demo.data.model.Feedback;
-import com.Raveralogistics.Demo.data.model.User;
+import com.Raveralogistics.Demo.data.model.*;
 import com.Raveralogistics.Demo.dtos.request.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface LogisticService {
     User register(RegisterRequest registerRequest);
@@ -27,4 +26,10 @@ public interface LogisticService {
     BigDecimal checkWalletBalance(String userId);
 
     Object findListOfBookingOf(String username);
+
+    void updateTrackingInfo(PackageRequest packageRequest);
+
+    List<PackageHistory> trackParcel(String Id);
+
+    Shipping shipParcel(ShippingRequest shippingRequest);
 }

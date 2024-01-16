@@ -1,12 +1,11 @@
-package com.Raveralogistics.Demo.dtos.request;
+package com.Raveralogistics.Demo.data.model;
 
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
-public class PackageRequest {
+public class PackageHistory {
     private LocalDateTime dateTime;
     private String action;
-    private String shippingId;
 }

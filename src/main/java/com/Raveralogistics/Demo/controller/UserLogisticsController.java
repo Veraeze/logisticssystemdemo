@@ -107,13 +107,13 @@ public class UserLogisticsController {
         }
     }
 
-    @GetMapping("/wallet balance/{userId}")
+    @GetMapping("Sender/wallet-balance/{userId}")
     public ResponseEntity<?> checkWalletBalance(@PathVariable("userId") String userId) {
         WalletBalanceResponse balanceResponse = new WalletBalanceResponse();
 
         try {
             BigDecimal balance = ravera.checkWalletBalance(userId);
-            balanceResponse.setMessage("Your balance is " + balance);
+            balanceResponse.setMessage("Your balance is $" + balance);
             return new ResponseEntity<>(new ApiResponse(true, balanceResponse), HttpStatus.ACCEPTED);
         }
         catch (Exception exception) {
